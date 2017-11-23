@@ -1,0 +1,31 @@
+{
+  "name": "fulcrum",
+  "version": "0.0.1",
+  "description": "The Fulcrum Node library provides convenient access to the Fulcrum API from applications written in server-side JavaScript.",
+  "main": "libs/fulcrum.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwerre/fulcrum.git"
+  },
+  "keywords": [
+    "fulcrum",
+    "api"
+  ],
+  "author": "Jonah Werre <jonah@surveyplanet.com> (https://surveyplanet.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwerre/fulcrum/issues"
+  },
+  "homepage": "https://github.com/jwerre/fulcrum#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.4",
+    "needle": "^2.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1"
+  }
+}

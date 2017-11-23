@@ -1,0 +1,4 @@
+--require assert
+--reporter spec
+--ui bdd
+--timeout 15000
