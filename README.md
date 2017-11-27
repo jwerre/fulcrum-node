@@ -2,7 +2,7 @@
 
 The Fulcrum Node library provides convenient access to the Fulcrum API from applications written in server-side JavaScript.
 
-*NOTE: This is not been tested on Windows*
+*NOTE: This has not been tested on Windows*
 
 ## Documentation
 
@@ -10,9 +10,10 @@ See the [Fulcurm API docs](http://developer.lucidhq.com).
 
 ## Installation
 
-Install the package with:
+~Install the package with:~
+~`npm install fulcrum --save`~
 
-		npm install fulcrum --save
+*NOTE: not registered on [npm](https://www.npmjs.com/) yet.*
 
 ## Authentication
 
