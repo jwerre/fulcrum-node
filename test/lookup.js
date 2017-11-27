@@ -10,7 +10,6 @@ describe( "Lookup", () => {
 			bundle = ['CountryLanguages','Industries','SampleTypes']
 			fulcrum.lookup.definitions.listGlobalDefinitions(bundle)
 				.then(function(data){
-					console.log(data);
 					assert.notEqual(data, null);
 					done()
 				}).catch(function(err){
@@ -51,7 +50,6 @@ describe( "Lookup", () => {
 		it("should list standard questions", (done) => {
 			fulcrum.lookup.questionLibrary.listStandardQuestions()
 				.then(function(data){
-					console.log(data);
 					assert.notEqual(data, null);
 					done()
 				}).catch(function(err){

@@ -2,6 +2,8 @@
 
 The Fulcrum Node library provides convenient access to the Fulcrum API from applications written in server-side JavaScript.
 
+*NOTE: This is not been tested on Windows*
+
 ## Documentation
 
 See the [Fulcurm API docs](http://developer.lucidhq.com).

@@ -24,7 +24,7 @@ class FulcrumResource {
 			options = null;
 		}
 		
-		let opts = _.defaults(options, {
+		let opts = _.defaultsDeep(options, {
 				compressed : true, // sets 'Accept-Encoding' to 'gzip,deflate'
 				follow_max : 5,    // follow up to five redirects
 				rejectUnauthorized : true,  // verify SSL certificate
@@ -44,7 +44,7 @@ class FulcrumResource {
 					data, 
 					opts, 
 					function (err, result) {
-
+						
 						if (err) {
 							// emit error
 							emit(errorEvent, err);
@@ -78,7 +78,7 @@ class FulcrumResource {
 	
 	_defaultHeaders () {
 		let header = {};
-		header['Authorization'] = this._fulcrum.getApiField('auth');
+		header.Authorization = this._fulcrum.getApiField('auth');
 		header['User-Agent'] = this._fulcrum.getApiField('agent');
 		return header;
 	}
