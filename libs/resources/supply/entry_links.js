@@ -11,10 +11,10 @@ class EntryLinks extends FulcrumResource {
 	}
 
 	// POST  https://api.samplicio.us/Supply/v1/SupplierLinks/Create/{SurveyNumber}/{SupplierCode}
-	createLink (surveyNumber, supplierCode, callback) {
-		return this._request( 'GET'
+	createLink (surveyNumber, supplierCode, args, callback) {
+		return this._request( 'POST'
 			, `/Supply/{{v}}/SupplierLinks/Create/${surveyNumber}/${supplierCode}`
-			, null
+			, args
 			, null
 			, callback
 		);
@@ -22,10 +22,10 @@ class EntryLinks extends FulcrumResource {
 	}
 	
 	// PUT  https://api.samplicio.us/Supply/v1/SupplierLinks/Update/{SurveyNumber}/{SupplierCode}
-	updateLink (surveyNumber, supplierCode, callback) {
-		return this._request( 'GET'
+	updateLink (surveyNumber, supplierCode, args, callback) {
+		return this._request( 'PUT'
 			, `/Supply/{{v}}/SupplierLinks/Update/${surveyNumber}/${supplierCode}`
-			, null
+			, args
 			, null
 			, callback
 		);

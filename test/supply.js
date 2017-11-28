@@ -45,8 +45,13 @@ describe( "Supply", () => {
 	
 	describe( "EntryLinks", () => {
 		
+		const args = {
+			"SupplierLinkTypeCode":"OWS",
+			"TrackingTypeCode":"NONE"
+		};
+		
 		it("should create entry link", (done) => {
-			fulcrum.supply.entryLinks.createLink("ABC", "XYZ")
+			fulcrum.supply.entryLinks.createLink("ABC", "XYZ", args)
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
@@ -58,7 +63,18 @@ describe( "Supply", () => {
 		});
 
 		it("should update entry link", (done) => {
-			fulcrum.supply.entryLinks.updateLink("ABC", "XYZ")
+
+			const args = {
+				"SupplierLinkTypeCode":"OWS",
+				"TrackingTypeCode":"NONE",
+				"DefaultLink":"",
+				"SuccessLink":"",
+				"FailureLink":"",
+				"OverQuotaLink": "",
+				"QualityTerminationLink":""
+			};
+
+			fulcrum.supply.entryLinks.updateLink("ABC", "XYZ", args)
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()

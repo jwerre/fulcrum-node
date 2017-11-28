@@ -13,7 +13,7 @@ class Quotas extends FulcrumResource {
     // POST https://api.samplicio.us/Demand/v1/SurveyQuotas/Create/{SurveyNumber}
 	createAQuota (surveyNumber, args, callback) {
 		return this._request( 'POST'
-			, `/Demand/{{v}}/SurveyQuotas/Create/{surveyNumber}`
+			, `/Demand/{{v}}/SurveyQuotas/Create/${surveyNumber}`
 			, args
 			, null
 			, callback
@@ -24,7 +24,7 @@ class Quotas extends FulcrumResource {
 	// PUT  https://api.samplicio.us/Demand/v1/SurveyQuotas/Update/{SurveyNumber}
 	updateAQuota (surveyNumber, args, callback) {
 		return this._request( 'PUT'
-			, `/Demand/{{v}}/SurveyQuotas/Update/{surveyNumber}`
+			, `/Demand/{{v}}/SurveyQuotas/Update/${surveyNumber}`
 			, args
 			, null
 			, callback
@@ -35,7 +35,7 @@ class Quotas extends FulcrumResource {
     // GET  https://api.samplicio.us/Demand/v1/SurveyQuotas/BySurveyNumber/{SurveyNumber}
 	listQuotas (surveyNumber, callback) {
 		return this._request( 'GET'
-			, `/Demand/{{v}}/SurveyQuotas/BySurveyNumber/{surveyNumber}`
+			, `/Demand/{{v}}/SurveyQuotas/BySurveyNumber/${surveyNumber}`
 			, null
 			, null
 			, callback
