@@ -43,7 +43,7 @@ Fulcrum.resources = resources;
 Fulcrum.REQUEST_SUCCESS_EVENT = 'request_success';
 Fulcrum.REQUEST_ERROR_EVENT = 'request_error';
 
-Fulcrum.DEFAULT_HOST = (process.env.NODE_ENV === 'development') ? 'sandbox.techops.engineering' : 'api.fulcrum.com';
+Fulcrum.DEFAULT_HOST = (process.env.NODE_ENV === 'production') ? 'api.fulcrum.com' : 'sandbox.techops.engineering';
 Fulcrum.DEFAULT_PORT = '443';
 Fulcrum.DEFAULT_API_VERSION = 1;
 
