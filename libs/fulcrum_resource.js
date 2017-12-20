@@ -3,7 +3,8 @@
 const	needle = require('needle'),
 		url = require('url'),
 		_ = require('lodash'),
-		utilities = require('./utilities');
+		utilities = require('./utilities'),
+		FulcrumError = require('./fulcrum_error');
 
 /**
  * Encapsulates request logic for a Fulcrum Resource
@@ -28,15 +29,21 @@ class FulcrumResource {
 				compressed : true, // sets 'Accept-Encoding' to 'gzip,deflate'
 				follow_max : 5,    // follow up to five redirects
 				rejectUnauthorized : true,  // verify SSL certificate
+				response_timeout: this._fulcrum.getApiField('timeout'),
 				headers: this._defaultHeaders(),
 			});
-
-		// let reqUrl = "https://api-dev.surveyplanet.com/test";
+		
+		if ( _.isPlainObject(data) && 
+			method.toLowerCase() === 'post' || 
+			method.toLowerCase() === 'put') {
+				data = JSON.stringify(data);
+			}
+		
 		let reqUrl = this._getRequestUrl(path);
 		let successEvent = this._fulcrum.getConstant('REQUEST_SUCCESS_EVENT');
 		let errorEvent = this._fulcrum.getConstant('REQUEST_ERROR_EVENT');
 		let emit = this._fulcrum.emit;
-
+		
 		return new this._fulcrum.Promise( (resolve, reject) => { 
 
 				needle.request(method.toLowerCase(), 
@@ -45,6 +52,11 @@ class FulcrumResource {
 					opts, 
 					function (err, result) {
 						
+						if (!err) {
+							// rerturns null if statusCode is below 400
+							err = FulcrumError.generate(result.statusCode, result.body)
+						}
+							
 						if (err) {
 							// emit error
 							emit(errorEvent, err);
@@ -72,7 +84,7 @@ class FulcrumResource {
 		
 		path = path.replace("{{v}}", `v${this._fulcrum.getApiField('version')}`);
 			
-		return `${proto}//${host}/${path}`;
+		return `${proto}//${host}${path}`;
 
 	}
 	
@@ -83,11 +95,9 @@ class FulcrumResource {
 		return header;
 	}
 
-	_timeoutHandler (timeout, req, callback) {}
-
-	_responseHandler (req, callback) {}
-
-	_errorHandler (req, callback) {}
+	// _timeoutHandler (timeout, req, callback) {}
+	// _responseHandler (req, callback) {}
+	// _errorHandler (req, callback) {}
 
 }
 

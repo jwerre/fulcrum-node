@@ -10,9 +10,23 @@ describe( "Lookup", () => {
 		
 		it("should list global definitions", (done) => {
 			bundle = [
-				'CountryLanguages',
-				// 'Industries',
-				// 'SampleTypes'
+					'CountryLanguages',
+					// 'Countries'  // --> all countries.
+					// 'CountryLanguages'  // --> all Country-Language pairs by ID.
+					// 'Industries'  // --> all options for industry type.
+					// 'SampleTypes'  // --> all types of sample that buyers can field on the platform.
+					// 'StudyTypes'  // --> all types of studies buyers can field on the platform.
+					// 'SupplierLinkTypes'  // --> all link types suppliers can use to send sample.
+					// 'SurveyStatuses'  // --> all possible survey statuses on the platform.
+					// 'BidProbabilities'  // --> all probabilities of a bid being awarded (Low, Med, High).
+					// 'BidStatuses'  // --> all possible statuses for a bid.
+					// 'ProposalTypes'  // --> all possible proposal types.
+					// 'CategoryLockOutDurations'  // --> all possible lockout times.
+					// 'QuestionClassifications'  // --> all question categories on the platform.
+					// 'SupplierPreferenceTypes'  // --> all possible preferences a supplier can communicate.
+					// 'SupplierRequestStatuses'  // --> all tracking methods a supplier can use to track a respondent’s status.
+					// 'SurveyPlatforms'  // --> survey platforms users may be sending to or from.
+					// 'ThirdPartyServices'  // --> all Third Party Services on the platform.
 				]
 			fulcrum.lookup.definitions.listGlobalDefinitions(bundle)
 				.then(function(data){
@@ -22,21 +36,15 @@ describe( "Lookup", () => {
 					});
 					assert.notEqual(language, null)
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
-		it("should list suppliers", (done) => {
+		it.skip("should list suppliers", (done) => {
 			fulcrum.lookup.definitions.listSuppliers()
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 
 		});
 		
@@ -45,10 +53,7 @@ describe( "Lookup", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
 		
@@ -66,10 +71,7 @@ describe( "Lookup", () => {
 					question = data.Questions[Math.floor(Math.random()*data.Questions.length)];
 					assert.notEqual(question, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
 		it("should list custom questions", (done) => {
@@ -77,10 +79,7 @@ describe( "Lookup", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
 		it("should show question text", (done) => {
@@ -89,10 +88,7 @@ describe( "Lookup", () => {
 					assert.notEqual(data, null);
 					assert.notEqual(data.Question, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
 		it("should show question options", (done) => {
@@ -102,10 +98,7 @@ describe( "Lookup", () => {
 					assert.notEqual(data.QuestionOptions, null);
 					
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done)
 		});
 		
 	});

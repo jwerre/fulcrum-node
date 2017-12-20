@@ -12,33 +12,42 @@ See the [Fulcurm API docs](http://developer.lucidhq.com).
 
 Install the package with:
 
-		npm install fulcrum --save
+```bash
+npm install fulcrum --save
+```
 
 ## Authentication
 
 Authenticate your account when using the API by including your secret API key in the request. Be sure to keep them secret! To use your API key, pass it to the Fulcrum module. The library will then automatically send this key in each request. There are three ways to pass your api key to the Fulcrum module:
 
 ### Pass your api key directly to the module:
-	
-	const fulcrum = require('fulcrum')('<your api key>');
+
+```js	
+const fulcrum = require('fulcrum')('<your api key>');
+```
 	
 or ES6 style:
-	
-	import Fulcrum from 'fulcrum';
-	const fulcrum = new Fulcrum('<your api key>');
+
+```js	
+import Fulcrum from 'fulcrum';
+const fulcrum = new Fulcrum('<your api key>');
+```
 
 ### Add your api key to your home directory
 
 If you don't pass your API key directoy to the module it will automatically look for it in a '.fulcrum.json' file in your home directory. Be sure that the file is valid JSON and has the value `key`.
 
-	'{"key": "<your api key>"}' > ~/.fulcrum.json
-	
+```bash
+'{"key": "<your api key>"}' > ~/.fulcrum.json
+```
 
 ### Create an environmental variable
 
 If you'd like to store your API key in a location other than your home folder, create the environmental variable `FULCRUM_API_KEY` that points to a valid json file.
 
-	export FULCRUM_API_KEY=/path/to/my/fulcrum_api_key.json
+```bash
+export FULCRUM_API_KEY=/path/to/my/fulcrum_api_key.json
+```
 
 ## Usage
 
@@ -47,7 +56,11 @@ The package needs to be configured with your API key. Ensure that the key you ar
 ``` js
 const fulcrum = require('fulcrum')('<your api key>');
 
-fulcrum.lookup.definitions.listGlobalDefinitions(['CountryLanguages','Industries','SampleTypes']), (err, res) =>
+fulcrum.lookup.definitions.listGlobalDefinitions([
+		'CountryLanguages',
+		'Industries',
+		'SampleTypes'
+	]), (err, res) =>
 		if (err) {
 			console.log(err)
 		} else {
@@ -109,19 +122,21 @@ fulcrum.off(requestErrorEvent, requestErrorHandler);
 
 ## More Information
 
- * [API Documentation](http://developer.lucidhq.com)
+* [API Documentation](http://developer.lucidhq.com)
 
-## Development
+## Testing
+
+A lot of the tests are not complete. Incomplete tests will be marked as `pending`.
 
 Run all tests:
 
 ```bash
-$ npm install
-$ npm test
+npm install
+npm test
 ```
 
 Run a single test suite:
 
 ```bash
-$ npm run mocha -- test/fulcrum.js
+mocha test/fulcrum.js
 ```

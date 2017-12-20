@@ -3,11 +3,192 @@ const 	assert = require('assert'),
 
 	
 describe( "Demand", () => {
+
+	let surveyCache = null;
 	
-	describe( "ExchangeGroups", () => {
+	describe( "Surveys", () => {
+		
+
+		it("should create a survey", (done) => {
+
+			let data = {
+				"SurveyName": "Example API Survey",
+				"CountryLanguageID": 43,
+				"ClientSurveyLiveURL": "https://s.surveyplanet.com/By0AMJdDl",
+				"Quota": 100,
+			};
+			
+			fulcrum.demand.surveys.createASurvey(data)
+				.then(function(data){
+					assert.notEqual(data, null);
+					surveyCache = data.Survey
+					done();
+				}).catch(done);
+
+		});
+
+		it("should update a survey", (done) => {
+
+			surveyCache.SurveyName = "Updated Example API Survey"
+
+			fulcrum.demand.surveys.updateASurvey(surveyCache.SurveyNumber, surveyCache)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+		it("should show a survey", (done) => {
+			fulcrum.demand.surveys.showASurvey(surveyCache.SurveyNumber)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+		it("should list surveys by status", (done) => {
+			fulcrum.demand.surveys.listSurveysByStatus(surveyCache.SurveyStatusCode)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+		it.skip("should reconcile a survey", (done) => {
+
+			let data = {
+				ResponseIDs: [
+					"9AF8B134-9E9F-E611-813Z-121EAE80731D",
+					"1ADX57D4-9A9F-E711-813E-121DAC84731P"
+				]
+			};
+
+			fulcrum.demand.surveys.reconcileASurvey(surveyCache.SurveyNumber, data)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+	});
+
+	describe( "Qualifications", () => {
+		
+		let qualificationsCache = null
+		
+		it("should create a qualification", (done) => {
+			
+			let data = {
+				"Name": "STANDARD_RELATIONSHIP",
+				"QuestionID": 42,
+				"LogicalOperator": "OR",
+				"NumberOfRequiredConditions": 1,
+				"IsActive": true,
+				"PreCodes": [
+					"1"
+				],
+				"Order": 7
+			};
+
+			fulcrum.demand.qualifications.createAQualification(surveyCache.SurveyNumber, data)
+				.then(function(data){
+					assert.notEqual(data, null);
+					qualificationsCache = data.Qualifications
+					done();
+				}).catch(done)
+
+		});
+		
+		it.skip("should update a qualification", (done) => {
+			
+			let data = qualificationsCache.pop()
+			data.IsActive = false
+			fulcrum.demand.qualifications.updateAQualification(surveyCache.SurveyNumber, data)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+		it("should list qualifications", (done) => {
+			fulcrum.demand.qualifications.listQualifications(surveyCache.SurveyNumber)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+				
+	});
+
+	describe( "Quotas", () => {
+		
+		let quotaCache = null;
+
+		it("should create a quota", (done) => {
+			
+			let data = {
+					"Name": "Quota Name",
+					"Quota": 50,
+					"IsActive": true,
+					"Conditions":
+					[
+						{
+							"QuestionID": 42,
+							"PreCodes": [
+								"18",
+								"19",
+								"20",
+								"21",
+								"22",
+							]
+						}
+					]
+				};
+				
+			fulcrum.demand.quotas.createAQuota(surveyCache.SurveyNumber, data)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+		it("should list quotas", (done) => {
+			fulcrum.demand.quotas.listQuotas(surveyCache.SurveyNumber)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+
+		it.skip("should update a quota", (done) => {
+
+			quotaCache.Name = "Quota Name Updated"
+
+			fulcrum.demand.quotas.updateAQuota(surveyCache.SurveyNumber, quotaCache)
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				}).catch(done)
+
+		});
+
+	});
+
+	describe.skip( "ExchangeGroups", () => {
 
 		it("should create a group", (done) => {
-			fulcrum.demand.exchangeGroups.createAGroup("123", {
+
+			let data = {
 						"SurveyNumber": 101100,
 						"Name":"Top Supplier Group",
 						"AllocationPercentage": 0.10,
@@ -17,49 +198,48 @@ describe( "Demand", () => {
 								"SupplierCode":"1010"
 								}
 							]	
-					}
-				).then(function(data){
+					};
+
+			fulcrum.demand.exchangeGroups.createAGroup("123", data)
+				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 		it("should create an empty group", (done) => {
-			fulcrum.demand.exchangeGroups.createAnEmptyGroup("123", {
+
+			let data = {
 						"SurveyNumber": 101100,
 						"Name":"Top Supplier Group",
 						"AllocationPercentage": 0.10,
 						"IsHedgeAccess": true,
-					}
-				).then(function(data){
+					};
+					
+			fulcrum.demand.exchangeGroups.createAnEmptyGroup("123", data)
+				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 		it("should update a group", (done) => {
-			fulcrum.demand.exchangeGroups.updateAGroup( "123", {
+
+			let data = {
 						"ID": 1234,
 						"SurveyNumber": 101100,
 						"Name":"Top Supplier Group",
 						"AllocationPercentage": 0.10,
 						"IsHedgeAccess": true,
-					}
-				).then(function(data){
+					};
+
+			fulcrum.demand.exchangeGroups.updateAGroup( "123", data )
+				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
@@ -67,11 +247,8 @@ describe( "Demand", () => {
 			fulcrum.demand.exchangeGroups.deleteAGroup("123", "456")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
@@ -79,11 +256,8 @@ describe( "Demand", () => {
 			fulcrum.demand.exchangeGroups.addToAGroup("123", "456")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
@@ -91,39 +265,35 @@ describe( "Demand", () => {
 			fulcrum.demand.exchangeGroups.showAGroup("123")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 		it("should remove from a group", (done) => {
-			fulcrum.demand.exchangeGroups.removeFromAGroup("123", {"SupplierGroupID":"XYZ"})
+			
+			let data = {
+					SupplierGroupID:"XYZ"
+				};
+			
+			fulcrum.demand.exchangeGroups.removeFromAGroup("123", data)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 	});
 	
-	describe( "ExchangeTemplates", () => {
+	describe.skip( "ExchangeTemplates", () => {
 		
 		it("should list exchange templates", (done) => {
 			fulcrum.demand.exchangeTemplates.listExchangeTemplates()
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
@@ -132,11 +302,8 @@ describe( "Demand", () => {
 			fulcrum.demand.exchangeTemplates.applyAnExchangeTemplate("123", "456", {"ABC":"XYZ"})
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
@@ -147,8 +314,8 @@ describe( "Demand", () => {
 		
 		it("should show time to completion", (done) => {
 
-			const args = {
-				"CountryLanguageID": 9,
+			let data = {
+				"CountryLanguageID": 43,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Price": 4.5,
@@ -205,21 +372,18 @@ describe( "Demand", () => {
 					}] 
 				};
 
-			fulcrum.demand.feasibility.showTimeToCompletion( args )
+			fulcrum.demand.feasibility.showTimeToCompletion( data )
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 		it("should show price", (done) => {
 
-			var args = {
-				"CountryLanguageID": 9,
+			let data = {
+				"CountryLanguageID": 43,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Quotas": [{
@@ -236,21 +400,18 @@ describe( "Demand", () => {
 				}, ]
 			};
 
-			fulcrum.demand.feasibility.showPrice(args)
+			fulcrum.demand.feasibility.showPrice(data)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 		it("should show completes per day", (done) => {
 
-			const args = {
-				"CountryLanguageID": 9,
+			let data = {
+				"CountryLanguageID": 43,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Price": 5,
@@ -267,30 +428,24 @@ describe( "Demand", () => {
 				}, ]
 			};
 			
-			fulcrum.demand.feasibility.showCompletesPerDay(args)
+			fulcrum.demand.feasibility.showCompletesPerDay(data)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 
 	});
 	
-	describe( "NonExchangeAllocations", () => {
+	describe.skip( "NonExchangeAllocations", () => {
 
 		it("should show allocations", (done) => {
 			fulcrum.demand.nonExchangeAllocations.showAllocations("123")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 		
 		it("should create an allocation", (done) => {
@@ -303,11 +458,8 @@ describe( "Demand", () => {
 					}	
 				).then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 		
 		it("should update an allocation", (done) => {
@@ -320,29 +472,23 @@ describe( "Demand", () => {
 					}
 				).then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 		
 		it("should delete an allocation", (done) => {
 			fulcrum.demand.nonExchangeAllocations.deleteAnAllocation("123")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 		
 
 		
 	});
 	
-	describe( "NonExchangeEntryLinks", () => {
+	describe.skip( "NonExchangeEntryLinks", () => {
 
 		it("should create a link", (done) => {
 			fulcrum.demand.nonExchangeEntryLinks.createALink("123", "456", {
@@ -351,11 +497,8 @@ describe( "Demand", () => {
 					}
 				).then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 
 		it("should update a link", (done) => {
@@ -370,119 +513,30 @@ describe( "Demand", () => {
 					}
 				).then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 
 		it("should delete a link", (done) => {
 			fulcrum.demand.nonExchangeEntryLinks.deleteALink("123", "456")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 		});
 
 	});
 	
-	describe( "Qualifications", () => {
-		
-		it("should create a qualification", (done) => {
-			fulcrum.demand.qualifications.createAQualification("123", {"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
 
-		});
-		
-		it("should update a qualification", (done) => {
-			fulcrum.demand.qualifications.updateAQualification("123", {"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should list qualifications", (done) => {
-			fulcrum.demand.qualifications.listQualifications("123")
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-				
-	});
-
-	describe( "Quotas", () => {
-
-		it("should create a quota", (done) => {
-			fulcrum.demand.quotas.createAQuota("123", {"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should update a quota", (done) => {
-			fulcrum.demand.quotas.updateAQuota("123", {"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should list quotas", (done) => {
-			fulcrum.demand.quotas.listQuotas("123")
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-	});
-
-	describe( "Recontact", () => {
+	describe.skip( "Recontact", () => {
 
 		it("should list qualified respondents", (done) => {
 
 			fulcrum.demand.recontact.listQualifiedRespondents("123", "456")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -501,27 +555,21 @@ describe( "Demand", () => {
 			fulcrum.demand.recontact.updateQualifiedRespondents("123", "456", args)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 
 		});
 	});
 
-	describe( "SurveyGroups", () => {
+	describe.skip( "SurveyGroups", () => {
 		
 		it("should list survey groups", (done) => {
 
 			fulcrum.demand.surveyGroups.listSurveyGroups()
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -530,11 +578,8 @@ describe( "Demand", () => {
 			fulcrum.demand.surveyGroups.showASurveyGroup("123")
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -547,11 +592,8 @@ describe( "Demand", () => {
 			fulcrum.demand.surveyGroups.createASurveyGroup(args)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -566,11 +608,8 @@ describe( "Demand", () => {
 			fulcrum.demand.surveyGroups.addToSurveyGroup("123", args)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -585,11 +624,8 @@ describe( "Demand", () => {
 			fulcrum.demand.surveyGroups.updateAGroup("123", args)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -604,11 +640,8 @@ describe( "Demand", () => {
 			fulcrum.demand.surveyGroups.removeFromASurveyGroup("123", args)
 				.then(function(data){
 					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+					done();
+				}).catch(done)
 					
 
 		});
@@ -616,67 +649,4 @@ describe( "Demand", () => {
 
 	});
 
-	describe( "Surveys", () => {
-
-		it("should create a survey", (done) => {
-			fulcrum.demand.surveys.createASurvey({"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should update a survey", (done) => {
-			fulcrum.demand.surveys.updateASurvey("ABC", {"ABC":"XYZ"})
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should show a survey", (done) => {
-			fulcrum.demand.surveys.showASurvey("ABC")
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should list surveys by status", (done) => {
-			fulcrum.demand.surveys.listSurveysByStatus("ABC")
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-		it("should reconcile a survey", (done) => {
-			fulcrum.demand.surveys.reconcileASurvey("ABC", ["XYZ"])
-				.then(function(data){
-					assert.notEqual(data, null);
-					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
-
-		});
-
-	});
 });

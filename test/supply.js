@@ -1,43 +1,34 @@
 const 	assert = require('assert'),
 		fulcrum = require('../libs/fulcrum')()
 
-describe( "Supply", () => {
+describe.skip( "Supply", () => {
 	
 	describe( "Allocations", () => {
 		
-		it("should list exchange surveys", (done) => {
+		it("list allocated surveys", (done) => {
 			fulcrum.supply.allocations.listAllocatedSurveys("ABC")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
-		it("should list exchange surveys", (done) => {
+		it("get an allocated survey", (done) => {
 			fulcrum.supply.allocations.showAnAllocatedSurvey("ABC", "XYZ")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
-		it("should list exchange surveys", (done) => {
+		it("list recently allocated surveys", (done) => {
 			fulcrum.supply.allocations.listRecentlyAllocatedSurveys("ABC", "XYZ")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -45,26 +36,25 @@ describe( "Supply", () => {
 	
 	describe( "EntryLinks", () => {
 		
-		const args = {
-			"SupplierLinkTypeCode":"OWS",
-			"TrackingTypeCode":"NONE"
-		};
 		
 		it("should create entry link", (done) => {
+
+			let args = {
+				"SupplierLinkTypeCode":"OWS",
+				"TrackingTypeCode":"NONE"
+			};
+
 			fulcrum.supply.entryLinks.createLink("ABC", "XYZ", args)
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
 		it("should update entry link", (done) => {
 
-			const args = {
+			let args = {
 				"SupplierLinkTypeCode":"OWS",
 				"TrackingTypeCode":"NONE",
 				"DefaultLink":"",
@@ -78,22 +68,17 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
 		it("should show entry link", (done) => {
+			
 			fulcrum.supply.entryLinks.showLink("ABC", "XYZ")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -102,14 +87,12 @@ describe( "Supply", () => {
 	describe( "Qualifications", () => {
 
 		it("should show qualifications", (done) => {
+			
 			fulcrum.supply.qualifications.showQualifications("ABC")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -122,10 +105,7 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -134,14 +114,13 @@ describe( "Supply", () => {
 	describe( "Recontact", () => {
 		
 		it("should list qualified respondents", (done) => {
+
 			fulcrum.supply.recontact.listQualifiedRespondents("ABC", "XYZ")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
+
 		});
 
 	});
@@ -149,14 +128,13 @@ describe( "Supply", () => {
 	describe( "Recruit", () => {
 		
 		it("should show marketing info", (done) => {
+
 			fulcrum.supply.recruit.showMarketingInfo("ABC", "XYZ")
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
+
 		});
 
 	});
@@ -169,10 +147,7 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -182,10 +157,7 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 
@@ -198,10 +170,7 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 		
@@ -214,10 +183,7 @@ describe( "Supply", () => {
 				.then(function(data){
 					assert.notEqual(data, null);
 					done()
-				}).catch(function(err){
-					assert.equal(err, null);
-					done()
-				});
+				}).catch(done);
 
 		});
 			

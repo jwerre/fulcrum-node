@@ -12,7 +12,7 @@ describe( "FulcrumResource", () => {
 	});
 	
 	it("should parse url",  () => {
-		url = fulcrumResource._getRequestUrl('{{v}}/peach/apples/grapes');
+		url = fulcrumResource._getRequestUrl('/{{v}}/peach/apples/grapes');
 		assert.equal(url, `https://${fulcrum.getConstant('DEFAULT_HOST')}/v1/peach/apples/grapes`);
 	});
 	
