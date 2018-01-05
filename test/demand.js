@@ -1,4 +1,5 @@
 const 	assert = require('assert'),
+		inspect = require('util').inspect,
 		fulcrum = require('../libs/fulcrum')()
 
 	
@@ -13,8 +14,8 @@ describe( "Demand", () => {
 
 			let data = {
 				"SurveyName": "Example API Survey",
-				"CountryLanguageID": 43,
-				"ClientSurveyLiveURL": "https://s.surveyplanet.com/By0AMJdDl",
+				"CountryLanguageID": 9,
+				"ClientSurveyLiveURL": `https://s.surveyplanet.com/${new Date().getTime()}`,
 				"Quota": 100,
 			};
 			
@@ -79,12 +80,12 @@ describe( "Demand", () => {
 	describe( "Qualifications", () => {
 		
 		let qualificationsCache = null
-		
+
 		it("should create a qualification", (done) => {
 			
 			let data = {
 				"Name": "STANDARD_RELATIONSHIP",
-				"QuestionID": 42,
+				"QuestionID": 632,
 				"LogicalOperator": "OR",
 				"NumberOfRequiredConditions": 1,
 				"IsActive": true,
@@ -97,7 +98,18 @@ describe( "Demand", () => {
 			fulcrum.demand.qualifications.createAQualification(surveyCache.SurveyNumber, data)
 				.then(function(data){
 					assert.notEqual(data, null);
+					// qualificationsCache = data.Qualifications
+					done();
+				}).catch(done)
+
+		});
+
+		it("should list qualifications", (done) => {
+			fulcrum.demand.qualifications.listQualifications(surveyCache.SurveyNumber)
+				.then(function(data){
+					assert.notEqual(data, null);
 					qualificationsCache = data.Qualifications
+					// console.log( inspect(data, { depth: null }) );
 					done();
 				}).catch(done)
 
@@ -108,21 +120,13 @@ describe( "Demand", () => {
 			let data = qualificationsCache.pop()
 			data.IsActive = false
 			fulcrum.demand.qualifications.updateAQualification(surveyCache.SurveyNumber, data)
-				.then(function(data){
-					assert.notEqual(data, null);
-					done();
-				}).catch(done)
+			.then(function(data){
+				assert.notEqual(data, null);
+				done();
+			}).catch(done)
 
 		});
 
-		it("should list qualifications", (done) => {
-			fulcrum.demand.qualifications.listQualifications(surveyCache.SurveyNumber)
-				.then(function(data){
-					assert.notEqual(data, null);
-					done();
-				}).catch(done)
-
-		});
 
 				
 	});
@@ -315,7 +319,7 @@ describe( "Demand", () => {
 		it("should show time to completion", (done) => {
 
 			let data = {
-				"CountryLanguageID": 43,
+				"CountryLanguageID": 9,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Price": 4.5,
@@ -383,7 +387,7 @@ describe( "Demand", () => {
 		it("should show price", (done) => {
 
 			let data = {
-				"CountryLanguageID": 43,
+				"CountryLanguageID": 9,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Quotas": [{
@@ -411,7 +415,7 @@ describe( "Demand", () => {
 		it("should show completes per day", (done) => {
 
 			let data = {
-				"CountryLanguageID": 43,
+				"CountryLanguageID": 9,
 				"LengthOfInterview": 5,
 				"Incidence": 100,
 				"Price": 5,
@@ -543,7 +547,7 @@ describe( "Demand", () => {
 		
 		it("should update qualified respondents", (done) => {
 
-			const args = {
+			let args = {
 					"SurveyQualifiedRespondents": [
 						{
 							"IsActive": true,
@@ -585,7 +589,7 @@ describe( "Demand", () => {
 		});
 		it("should create a survey group", (done) => {
 			
-			const args = {
+			let args = {
 				"Name":"Group 1"
 			}
 
@@ -599,7 +603,7 @@ describe( "Demand", () => {
 		});
 		it("should add to survey group", (done) => {
 
-			const args = {
+			let args = {
 				"SurveyIDs": [
 					"101101"
 				]
@@ -615,7 +619,7 @@ describe( "Demand", () => {
 		});
 		it("should update a group", (done) => {
 
-			const args = {
+			let args = {
 				"SurveyIDs": [
 					"101101"
 				]
@@ -631,7 +635,7 @@ describe( "Demand", () => {
 		});
 		it("should remove from a survey group", (done) => {
 
-			const args = {
+			let args = {
 				"SurveyIDs": [
 					"101101"
 				]
@@ -649,4 +653,79 @@ describe( "Demand", () => {
 
 	});
 
+	describe( "Reach Estimator (beta)", () => {
+
+		const range = (start, end) => Array.from({length: (end - start)}, (v, k) => k + start);
+		
+		const parseQualifications = (data) => {
+			
+			qualifications = []
+
+			data.forEach(function(item){
+				item.conditions.forEach(function(q){
+					qualifications.push({
+						question_id: item.questionId,
+						condition: q.toString()
+					});
+				});
+			})
+			
+			return qualifications
+
+		}
+		
+		it("should estimate the price and feasibility for a survey", (done) => {
+
+			data = [
+				{
+					questionId: 42, // AGE
+					conditions: range(13,100)
+				},{
+					questionId: 43, // GENDER
+					conditions: range(1,3)
+				// },{
+				// 	questionId: 45, // ZIP
+				// 	conditions: [
+				// 		'98121',
+				// 		'98101',
+				// 		'98104',
+				// 		'98134',
+				// 	]
+				// },{
+				// 	questionId: 113, // ETHNICITY
+				// 	conditions: range(1,17)
+				// },{
+				// 	questionId: 47, // HISPANIC
+				// 	conditions: range(1, 16)
+				// },{
+				// 	questionId: 14785, // STANDARD_HHI_US
+				// 	conditions: range(1,28)
+				}
+			]
+			
+			
+			
+
+			let args = {
+				"qualifications": parseQualifications(data),
+				"completes": 100,
+				"days": 7,
+				"loi": 10, // length of interview
+				"ir": 9,
+				"price_ceiling": 3.5
+			};
+
+			// console.log( inspect(args, { depth: 10 }) );
+			
+			fulcrum.demand.reach.audienceEstimate(args)
+				.then(function(data){
+					assert.notEqual(data, null);
+					// console.log( inspect(data, { depth: null }) );
+					done();
+				}).catch(done)
+					
+
+		});
+
+	});
 });

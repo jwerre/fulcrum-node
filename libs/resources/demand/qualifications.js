@@ -6,7 +6,6 @@ class Qualifications extends FulcrumResource {
 	
 	
 	constructor(fulcrum) {
-
 		super(fulcrum)
 	}
 	

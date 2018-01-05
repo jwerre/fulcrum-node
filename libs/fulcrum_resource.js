@@ -19,6 +19,13 @@ class FulcrumResource {
 		
 		method = method || "get";
 		callback = callback || function(){};
+		
+		let version = null;
+		
+		if (data && data.version) {
+			version = data.version
+			delete data.version
+		}
 
 		if (_.isFunction(options)) {
 			callback = options;
@@ -39,7 +46,7 @@ class FulcrumResource {
 				data = JSON.stringify(data);
 			}
 		
-		let reqUrl = this._getRequestUrl(path);
+		let reqUrl = this._getRequestUrl(path, version);
 		let successEvent = this._fulcrum.getConstant('REQUEST_SUCCESS_EVENT');
 		let errorEvent = this._fulcrum.getConstant('REQUEST_ERROR_EVENT');
 		let emit = this._fulcrum.emit;
@@ -77,12 +84,16 @@ class FulcrumResource {
 			
 	}
 	
-	_getRequestUrl (path) {
+	_getRequestUrl (path, version) {
 		
 		let proto = this._fulcrum.getApiField('port') == 443 ? 'https:' : 'http:';
 		let host = this._fulcrum.getApiField('host');
 		
-		path = path.replace("{{v}}", `v${this._fulcrum.getApiField('version')}`);
+		if (!version) {
+			version = this._fulcrum.getApiField('version')
+		}
+		
+		path = path.replace("{{v}}", `v${version}`);
 			
 		return `${proto}//${host}${path}`;
 
