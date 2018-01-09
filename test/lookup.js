@@ -72,12 +72,12 @@ describe( "Lookup", () => {
 					assert.notEqual(data, null);
 					questionCache = data.Questions[Math.floor(Math.random()*data.Questions.length)];
 					
-					// questionCache = data.Questions.find(function(q){ return q.Name === 'STANDARD_HHI_US'});
+					// questionCache = data.Questions.find(function(q){ return q.Name === 'STANDARD_HHI'});
+					// console.log(inspect(questionCache, { depth: 5 }));
 					// data.Questions.forEach(function(q){
 					// 	console.log("\n—————————————");
 					// 	console.log( inspect(q, { depth: 5, color: true }) );
 					// });
-					// console.log(inspect(questionCache, { depth: 5 }));
 					
 					assert.notEqual(questionCache, null);
 					done()

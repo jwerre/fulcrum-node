@@ -698,7 +698,7 @@ describe( "Demand", () => {
 				// 	questionId: 47, // HISPANIC
 				// 	conditions: range(1, 16)
 				// },{
-				// 	questionId: 14785, // STANDARD_HHI_US
+				// 	questionId: 61076, // STANDARD_HHI
 				// 	conditions: range(1,28)
 				}
 			]
@@ -708,7 +708,7 @@ describe( "Demand", () => {
 
 			let args = {
 				"qualifications": parseQualifications(data),
-				"completes": 100,
+				"completes": 963,
 				"days": 7,
 				"loi": 10, // length of interview
 				"ir": 9,

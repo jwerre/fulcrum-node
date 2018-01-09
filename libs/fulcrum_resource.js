@@ -18,7 +18,7 @@ class FulcrumResource {
 	_request (method, path, data, options, callback) {
 		
 		method = method || "get";
-		callback = callback || function(){};
+		// callback = callback || function(){};
 		
 		let version = null;
 		
@@ -67,17 +67,28 @@ class FulcrumResource {
 						if (err) {
 							// emit error
 							emit(errorEvent, err);
-							// reject as promise
-							reject(err);
+							
 							// return callback
-							return callback(err);
+							if (_.isFunction(callback)) {
+								return callback(err);
+							}
+							// reject as promise
+							else {
+								return reject(err);
+							}
 						};
+
 						// emit results
 						emit(successEvent, result.body);
-						// resolve as promise
-						resolve(result.body);
+
 						// return callback
-						return callback(null, result.body);
+						if( _.isFunction(callback)) {
+							return callback(null, result.body);
+						}
+						// resolve as promise
+						else {
+							return resolve(result.body);
+						}
 					});
 			
 		});
