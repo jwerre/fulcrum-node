@@ -3,7 +3,8 @@
 
 const 	EventEmitter = require('events').EventEmitter,
 		Promise = require('bluebird'),
-		utilities = require('./utilities'),
+		os = require('os'),
+		config = require( process.env.FULCRUM_CONF || os.homedir()+'/.fulcrum.json' ),
 		resources = {
 	
 			lookup: {
@@ -31,11 +32,21 @@ const 	EventEmitter = require('events').EventEmitter,
 				NonExchangeEntryLinks : require('./resources/demand/non_exchange_entry_links'),
 				Qualifications : require('./resources/demand/qualifications'),
 				Quotas : require('./resources/demand/quotas'),
-				Reach : require('./resources/demand/reach'),
+				// Reach : require('./resources/demand/reach'),
 				Recontact : require('./resources/demand/recontact'),
+				ServerToServer : require('./resources/demand/server_to_server'),
 				SurveyGroups : require('./resources/demand/survey_groups'),
 				Surveys : require('./resources/demand/surveys'),
 			},
+
+			demandBeta: {
+				Dictionary: require('./resources/demand/beta/dictionary'),
+				Projects: require('./resources/demand/beta/projects'),
+				Reach: require('./resources/demand/beta/reach'),
+				Sessions: require('./resources/demand/beta/sessions'),
+				Surveys: require('./resources/demand/beta/surveys'),
+			}
+			
 			
 		};
 
@@ -63,16 +74,11 @@ Fulcrum.USER_AGENT = {
 };
 
 
-function Fulcrum(key, version) {
+function Fulcrum(key, version, businessId) {
 	
 	if (!(this instanceof Fulcrum)) {
 		return new Fulcrum(key, version);
 	}
-	
-	if (!key) {
-		key = utilities.getApiKey()
-	}
-
 	Object.defineProperty(this, '_emitter', {
 		value: new EventEmitter(),
 		enumerable: false,
@@ -89,21 +95,32 @@ function Fulcrum(key, version) {
 	this.Promise = Promise
 
 	this._api = {
-		auth: null,
+		auth: key || config.key,
+		version: version || config.version || Fulcrum.DEFAULT_API_VERSION,
+		businessId: businessId || config.businessId,
 		host: Fulcrum.DEFAULT_HOST,
 		port: Fulcrum.DEFAULT_PORT,
-		version: Fulcrum.DEFAULT_API_VERSION,
 		timeout: Fulcrum.DEFAULT_TIMEOUT,
 		agent: Fulcrum.USER_AGENT,
 		dev: false,
 	};
 
 	this._prepResources();
-	this.setApiKey(key);
-	this.setApiVersion(version);
+	// this.setApiKey(key);
+	// this.setApiVersion(version);
+	// this.setBusinessId(businessId);
+	
 }
 
 Fulcrum.prototype = {
+
+	getApiField: function(key) {
+		return this._api[key];
+	},
+
+	_setApiField: function(key, value) {
+		this._api[key] = value;
+	},
 
 	setHost: function(host, port, protocol) {
 		this._setApiField('host', host);
@@ -135,6 +152,12 @@ Fulcrum.prototype = {
 		}
 	},
 
+	setBusinessId: function(key) {
+		if (key) {
+			this._setApiField('businessId', key);
+		}
+	},
+
 	setTimeout: function(timeout) {
 		this._setApiField(
 			'timeout',
@@ -144,14 +167,6 @@ Fulcrum.prototype = {
 
 	setHttpAgent: function(agent) {
 		this._setApiField('agent', agent);
-	},
-
-	_setApiField: function(key, value) {
-		this._api[key] = value;
-	},
-
-	getApiField: function(key) {
-		return this._api[key];
 	},
 
 	getConstant: function(c) {

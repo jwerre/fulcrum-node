@@ -653,77 +653,18 @@ describe( "Demand", () => {
 
 	});
 
-	describe( "Reach Estimator (beta)", () => {
 
-		const range = (start, end) => Array.from({length: (end - start)}, (v, k) => k + start);
+
+	describe.skip( "S2S [NOT SURE IF THERE IS A WAY TO TEST THIS]", () => {
 		
-		const parseQualifications = (data) => {
-			
-			qualifications = []
-
-			data.forEach(function(item){
-				item.conditions.forEach(function(q){
-					qualifications.push({
-						question_id: item.questionId,
-						condition: q.toString()
-					});
-				});
-			})
-			
-			return qualifications
-
-		}
-		
-		it("should estimate the price and feasibility for a survey", (done) => {
-
-			data = [
-				{
-					questionId: 42, // AGE
-					conditions: range(13,100)
-				},{
-					questionId: 43, // GENDER
-					conditions: range(1,3)
-				// },{
-				// 	questionId: 45, // ZIP
-				// 	conditions: [
-				// 		'98121',
-				// 		'98101',
-				// 		'98104',
-				// 		'98134',
-				// 	]
-				// },{
-				// 	questionId: 113, // ETHNICITY
-				// 	conditions: range(1,17)
-				// },{
-				// 	questionId: 47, // HISPANIC
-				// 	conditions: range(1, 16)
-				// },{
-				// 	questionId: 61076, // STANDARD_HHI
-				// 	conditions: range(1,28)
-				}
-			]
-			
-			
-			
-
-			let args = {
-				"qualifications": parseQualifications(data),
-				"completes": 963,
-				"days": 7,
-				"loi": 10, // length of interview
-				"ir": 9,
-				"price_ceiling": 3.5
-			};
-
-			// console.log( inspect(args, { depth: 10 }) );
-			
-			fulcrum.demand.reach.audienceEstimate(args)
+		it("should submit a secure client callback", (done) => {
+			// console.log(fulcrum.demand);
+			fulcrum.demand.serverToServer.secureClientCallback('123-456-789')
 				.then(function(data){
 					assert.notEqual(data, null);
-					// console.log( inspect(data, { depth: null }) );
+					console.log(data);
 					done();
-				}).catch(done)
-					
+				}).catch(done);
 
 		});
 

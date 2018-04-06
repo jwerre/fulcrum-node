@@ -18,7 +18,6 @@ class FulcrumResource {
 	_request (method, path, data, options, callback) {
 		
 		method = method || "get";
-		// callback = callback || function(){};
 		
 		let version = null;
 		
@@ -42,54 +41,59 @@ class FulcrumResource {
 		
 		if ( _.isPlainObject(data) && 
 			method.toLowerCase() === 'post' || 
-			method.toLowerCase() === 'put') {
+			method.toLowerCase() === 'put' || 
+			method.toLowerCase() === 'patch') 
+			{
 				data = JSON.stringify(data);
 			}
 		
-		let reqUrl = this._getRequestUrl(path, version);
-		let successEvent = this._fulcrum.getConstant('REQUEST_SUCCESS_EVENT');
-		let errorEvent = this._fulcrum.getConstant('REQUEST_ERROR_EVENT');
-		let emit = this._fulcrum.emit;
+		let reqUrl = this._getRequestUrl(path, version),
+			successEvent = this._fulcrum.getConstant('REQUEST_SUCCESS_EVENT'),
+			errorEvent = this._fulcrum.getConstant('REQUEST_ERROR_EVENT'),
+			emit = this._fulcrum.emit;
 		
 		return new this._fulcrum.Promise( (resolve, reject) => { 
-
-				needle.request(method.toLowerCase(), 
-					reqUrl, 
-					data, 
-					opts, 
-					function (err, result) {
+			
+			// console.log(reqUrl, data, opts);
+			
+			needle.request( method.toLowerCase(), 
+				reqUrl, 
+				data, 
+				opts, 
+				function (err, result) {
+					
+					if (!err) {
+						// returns null if statusCode is below 400
+						err = FulcrumError.generate(result.statusCode, result.body)
+					}
 						
-						if (!err) {
-							// rerturns null if statusCode is below 400
-							err = FulcrumError.generate(result.statusCode, result.body)
-						}
-							
-						if (err) {
-							// emit error
-							emit(errorEvent, err);
-							
-							// return callback
-							if (_.isFunction(callback)) {
-								return callback(err);
-							}
-							// reject as promise
-							else {
-								return reject(err);
-							}
-						};
-
-						// emit results
-						emit(successEvent, result.body);
-
+					if (err) {
+						// emit error
+						emit(errorEvent, err);
+						
 						// return callback
-						if( _.isFunction(callback)) {
-							return callback(null, result.body);
+						if (_.isFunction(callback)) {
+							return callback(err);
 						}
-						// resolve as promise
+						// reject as promise
 						else {
-							return resolve(result.body);
+							return reject(err);
 						}
-					});
+					};
+
+					// emit results
+					emit(successEvent, result.body);
+
+					// return callback
+					if( _.isFunction(callback)) {
+						return callback(null, result.body);
+					}
+					// resolve as promise
+					else {
+						return resolve(result.body);
+					}
+				}
+			);
 			
 		});
 			

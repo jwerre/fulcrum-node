@@ -9,13 +9,13 @@ class FulcrumError extends Error {
 		this.status = status;
 		this.type = type;
 		this.raw = raw;
-
 	}
 	
 	static generate (statusCode, raw) {
-	
+		
+		this.raw = raw;
 		let err = null;
-	
+		
 		switch (statusCode) {
 	
 			case 400: 
@@ -89,20 +89,33 @@ class FulcrumError extends Error {
 		if (err && err.type) {
 			
 			let msg = err.message;
-
-			if (raw && 
-				raw.ApiMessages instanceof Array && 
-				raw.ApiMessages.length) {
+			
+			if (raw) {
+				
+				if (raw.ApiMessages instanceof Array && raw.ApiMessages.length) {
 					msg = raw.ApiMessages.pop();
 					
 					if (msg.length) {
-						let exception = msg.split('EXCEPTION:')
+						
+						let exception = msg.split('EXCEPTION:');
+						
 						if (exception.length && exception[1]) {
-							msg = exception[1].trim()
+							msg = exception[1].trim();
 						}
+						
 					}
-				}
+					
+				} else if (raw.message && raw.message.length) {
+					
+					msg = raw.message;
 
+				} else if (raw.messages && raw.messages.length) {
+					
+					msg = raw.messages;
+				}
+				
+			}
+			
 			err = new FulcrumError(statusCode, msg, err.type, raw);
 		}
 	
