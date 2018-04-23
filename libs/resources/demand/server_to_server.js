@@ -17,8 +17,6 @@ class S2S extends FulcrumResource {
 		
 		let url = this._fulcrum.getApiField('s2sCallback');
 		
-		// console.log(url);
-		
 		return this._request( 'PUT'
 			, `${url}/${sessionId}`
 			, args
