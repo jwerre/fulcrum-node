@@ -100,17 +100,24 @@ class FulcrumResource {
 	}
 	
 	_getRequestUrl (path, version) {
-		
-		let proto = this._fulcrum.getApiField('port') == 443 ? 'https:' : 'http:';
-		let host = this._fulcrum.getApiField('host');
-		
+
 		if (!version) {
 			version = this._fulcrum.getApiField('version')
 		}
 		
 		path = path.replace("{{v}}", `v${version}`);
-			
-		return `${proto}//${host}${path}`;
+		
+		// s2s callback has a different url
+		if ( /^(https?):\/\//i.test(path) ) {
+			return path;
+
+		} else {
+		
+			let proto = this._fulcrum.getApiField('port') == 443 ? 'https:' : 'http:';
+			let host = this._fulcrum.getApiField('host');
+				
+			return `${proto}//${host}${path}`;
+		}
 
 	}
 	

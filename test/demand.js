@@ -658,13 +658,13 @@ describe( "Demand", () => {
 	describe.skip( "S2S [NOT SURE IF THERE IS A WAY TO TEST THIS]", () => {
 		
 		it("should submit a secure client callback", (done) => {
-			// console.log(fulcrum.demand);
-			fulcrum.demand.serverToServer.secureClientCallback('123-456-789')
+
+			fulcrum.demand.serverToServer.secureClientCallback('5852A37C-6C07-E611-8111-125BDAFF1DF1')
 				.then(function(data){
 					assert.notEqual(data, null);
-					console.log(data);
 					done();
-				}).catch(done);
+				})
+				.catch(done);
 
 		});
 

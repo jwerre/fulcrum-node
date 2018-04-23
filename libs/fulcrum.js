@@ -53,14 +53,20 @@ const 	EventEmitter = require('events').EventEmitter,
 Fulcrum.resources = resources;
 
 Fulcrum.REQUEST_SUCCESS_EVENT = 'request_success';
+
 Fulcrum.REQUEST_ERROR_EVENT = 'request_error';
 
-Fulcrum.DEFAULT_HOST = (process.env.NODE_ENV === 'production') ? 'api.fulcrum.com' : 'sandbox.techops.engineering';
+Fulcrum.DEFAULT_HOST = (process.env.NODE_ENV === 'production') ? 'api.samplicio.us' : 'sandbox.techops.engineering';
+
 Fulcrum.DEFAULT_PORT = '443';
+
 Fulcrum.DEFAULT_API_VERSION = 1;
 
 // Use node's default timeout:
 Fulcrum.DEFAULT_TIMEOUT = require('http').createServer().timeout;
+
+// TODO: may need to add a separate version number for s2s callback
+Fulcrum.S2S_CALLBACK_URL = 'https://callback.samplicio.us/callback/{{v}}/status';
 
 Fulcrum.PACKAGE_VERSION = require('../package.json').version;
 
@@ -102,6 +108,7 @@ function Fulcrum(key, version, businessId) {
 		port: Fulcrum.DEFAULT_PORT,
 		timeout: Fulcrum.DEFAULT_TIMEOUT,
 		agent: Fulcrum.USER_AGENT,
+		s2sCallback: Fulcrum.S2S_CALLBACK_URL,
 		dev: false,
 	};
 
