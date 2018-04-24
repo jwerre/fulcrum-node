@@ -4,7 +4,8 @@
 const 	EventEmitter = require('events').EventEmitter,
 		Promise = require('bluebird'),
 		os = require('os'),
-		config = require( process.env.FULCRUM_CONF || os.homedir()+'/.fulcrum.json' ),
+		fs = require('fs'),
+		configFile = process.env.FULCRUM_CONF || os.homedir()+'/.fulcrum.json',
 		resources = {
 	
 			lookup: {
@@ -49,6 +50,12 @@ const 	EventEmitter = require('events').EventEmitter,
 			
 			
 		};
+
+let config = {};
+
+if ( fs.existsSync(configFile) ) {
+	config = require(configFile);
+}
 
 Fulcrum.resources = resources;
 
