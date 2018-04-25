@@ -72,8 +72,9 @@ Fulcrum.DEFAULT_API_VERSION = 1;
 // Use node's default timeout:
 Fulcrum.DEFAULT_TIMEOUT = require('http').createServer().timeout;
 
-// TODO: may need to add a separate version number for s2s callback
-Fulcrum.S2S_CALLBACK_URL = 'https://callback.samplicio.us/callback/{{v}}/status';
+Fulcrum.S2S_CALLBACK_VERSION = 1;
+
+Fulcrum.S2S_CALLBACK_HOST = 'callback.samplicio.us';
 
 Fulcrum.PACKAGE_VERSION = require('../package.json').version;
 
@@ -87,11 +88,16 @@ Fulcrum.USER_AGENT = {
 };
 
 
-function Fulcrum(key, version, businessId) {
+function Fulcrum(options) {
 	
-	if (!(this instanceof Fulcrum)) {
-		return new Fulcrum(key, version);
+	if ( !options ) {
+		options = {}
 	}
+	
+	if ( !(this instanceof Fulcrum) ) {
+		return new Fulcrum(options);
+	}
+
 	Object.defineProperty(this, '_emitter', {
 		value: new EventEmitter(),
 		enumerable: false,
@@ -108,22 +114,21 @@ function Fulcrum(key, version, businessId) {
 	this.Promise = Promise
 
 	this._api = {
-		auth: key || config.key,
-		version: version || config.version || Fulcrum.DEFAULT_API_VERSION,
-		businessId: businessId || config.businessId,
+		auth: options.key || config.key,
+		version: options.version || config.version || Fulcrum.DEFAULT_API_VERSION,
+		businessId: options.businessId || config.businessId,
 		host: Fulcrum.DEFAULT_HOST,
 		port: Fulcrum.DEFAULT_PORT,
 		timeout: Fulcrum.DEFAULT_TIMEOUT,
 		agent: Fulcrum.USER_AGENT,
-		s2sCallback: Fulcrum.S2S_CALLBACK_URL,
+		s2sKey: options.s2sKey || config.s2sKey,
+		s2sHost: Fulcrum.S2S_CALLBACK_HOST,
+		s2sVersion: Fulcrum.S2S_CALLBACK_VERSION,
 		dev: false,
 	};
 
 	this._prepResources();
-	// this.setApiKey(key);
-	// this.setApiVersion(version);
-	// this.setBusinessId(businessId);
-	
+
 }
 
 Fulcrum.prototype = {

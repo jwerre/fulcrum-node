@@ -655,7 +655,7 @@ describe( "Demand", () => {
 
 
 
-	describe.skip( "S2S [NOT SURE IF THERE IS A WAY TO TEST THIS]", () => {
+	describe.skip( "S2S (There are no test sessions for this request)", () => {
 		
 		it("should submit a secure client callback", (done) => {
 

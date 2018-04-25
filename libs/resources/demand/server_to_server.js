@@ -15,12 +15,21 @@ class S2S extends FulcrumResource {
 
 		args = _.defaults( {status_id : 10} , args);
 		
-		let url = this._fulcrum.getApiField('s2sCallback');
+		let options = {
+			version: this._fulcrum.getApiField('s2sVersion'),
+			headers: {
+				Authorization: this._fulcrum.getApiField('s2sKey')
+			},
+		};
+		
+		let host = this._fulcrum.getApiField('s2sHost');
+		
+		let url = `https://${host}/callback/{{v}}/status/${sessionId}`;
 		
 		return this._request( 'PUT'
-			, `${url}/${sessionId}`
+			, url
 			, args
-			, null
+			, options
 			, callback
 		);
 	}

@@ -21,9 +21,9 @@ class FulcrumResource {
 		
 		let version = null;
 		
-		if (data && data.version) {
-			version = data.version
-			delete data.version
+		if (options && options.version) {
+			version = options.version
+			delete options.version
 		}
 
 		if (_.isFunction(options)) {
@@ -36,7 +36,10 @@ class FulcrumResource {
 				follow_max : 5,    // follow up to five redirects
 				rejectUnauthorized : true,  // verify SSL certificate
 				response_timeout: this._fulcrum.getApiField('timeout'),
-				headers: this._defaultHeaders(),
+				headers: {
+					Authorization: this._fulcrum.getApiField('auth'),
+					'User-Agent': this._fulcrum.getApiField('agent')
+				}
 			});
 		
 		if ( _.isPlainObject(data) && 
@@ -121,13 +124,6 @@ class FulcrumResource {
 
 	}
 	
-	_defaultHeaders () {
-		let header = {};
-		header.Authorization = this._fulcrum.getApiField('auth');
-		header['User-Agent'] = this._fulcrum.getApiField('agent');
-		return header;
-	}
-
 	// _timeoutHandler (timeout, req, callback) {}
 	// _responseHandler (req, callback) {}
 	// _errorHandler (req, callback) {}
