@@ -69,8 +69,8 @@ Fulcrum.DEFAULT_PORT = '443';
 
 Fulcrum.DEFAULT_API_VERSION = 1;
 
-// Use node's default timeout:
-Fulcrum.DEFAULT_TIMEOUT = require('http').createServer().timeout;
+// Use node's default timeout: require('http').createServer().timeout;
+Fulcrum.DEFAULT_TIMEOUT = 120000
 
 Fulcrum.S2S_CALLBACK_VERSION = 1;
 
