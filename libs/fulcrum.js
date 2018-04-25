@@ -123,8 +123,8 @@ function Fulcrum(options) {
 		agent: Fulcrum.USER_AGENT,
 		s2sKey: options.s2sKey || config.s2sKey,
 		s2sHost: Fulcrum.S2S_CALLBACK_HOST,
-		s2sVersion: Fulcrum.S2S_CALLBACK_VERSION,
-		dev: false,
+		s2sVersion: options.s2sVersion || config.s2sVersion || Fulcrum.S2S_CALLBACK_VERSION,
+		dev: process.env.NODE_ENV === 'development',
 	};
 
 	this._prepResources();
