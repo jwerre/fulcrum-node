@@ -18,6 +18,7 @@ class FulcrumResource {
 	_request (method, path, data, options, callback) {
 		
 		method = method || "get";
+		method = method.toLowerCase().trim()
 		
 		let version = null;
 		
@@ -32,6 +33,7 @@ class FulcrumResource {
 		}
 		
 		let opts = _.defaultsDeep(options, {
+				json: method !== 'get',
 				compressed : true, // sets 'Accept-Encoding' to 'gzip,deflate'
 				follow_max : 5,    // follow up to five redirects
 				rejectUnauthorized : true,  // verify SSL certificate
@@ -41,14 +43,6 @@ class FulcrumResource {
 					'User-Agent': this._fulcrum.getApiField('agent')
 				}
 			});
-		
-		if ( _.isPlainObject(data) && 
-			method.toLowerCase() === 'post' || 
-			method.toLowerCase() === 'put' || 
-			method.toLowerCase() === 'patch') 
-			{
-				data = JSON.stringify(data);
-			}
 		
 		let reqUrl = this._getRequestUrl(path, version),
 			successEvent = this._fulcrum.getConstant('REQUEST_SUCCESS_EVENT'),

@@ -655,16 +655,61 @@ describe( "Demand", () => {
 
 
 
-	describe.skip( "S2S (There are no test sessions for this request)", () => {
+	describe( "S2S", () => {
 		
-		it("should submit a secure client callback", (done) => {
+		it.skip("should submit a secure client callback (There are no test sessions to test this request)", (done) => {
 
-			fulcrum.demand.serverToServer.secureClientCallback('5852A37C-6C07-E611-8111-125BDAFF1DF1')
+			fulcrum.demand.serverToServer.secureClientCallback('5aea3a29-8b60-4300-94a7-f915e97e46b8')
 				.then(function(data){
 					assert.notEqual(data, null);
 					done();
 				})
 				.catch(done);
+
+		});
+
+		it("should submit a secure client callback with an invalid session id", (done) => {
+
+			fulcrum.demand.serverToServer.secureClientCallback('5aea3a29-8b60-4300-94a7-f915e97e46bf')
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				})
+				.catch(function(err){
+					assert.equal(err.status, 400)
+					done()
+				});
+
+		});
+
+		it("should submit a secure client callback with an invalid session id", (done) => {
+
+			fulcrum.demand.serverToServer.secureClientCallback('123abc')
+				.then(function(data){
+					assert.notEqual(data, null);
+					done();
+				})
+				.catch(function(err){
+					assert.equal(err.status, 400)
+					assert.equal(/must be a valid GUID/.test(err.message), true)
+					done()
+				});
+
+		});
+
+		it("should submit a secure client callback with an invalid parameters", (done) => {
+
+			fulcrum.demand.serverToServer.secureClientCallback('5aea3a29-8b60-4300-94a7-f915e97e46bf', 
+					{user_id:123}
+				).then(function(data){
+					assert.notEqual(data, null);
+					done();
+				})
+				.catch(function(err){
+					assert.equal(err.status, 400)
+					assert.equal(/is not allowed/.test(err.message), true)
+					done()
+				});
 
 		});
 
