@@ -8,18 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jwerre/fulcrum.git"
+    "url": "github:jwerre/fulcrum-node"
   },
   "keywords": [
     "fulcrum",
     "api"
   ],
-  "author": "Jonah Werre <jonah@surveyplanet.com> (https://surveyplanet.com)",
+  "author": "Jonah Werre <jonahwerre@gmail.com> (https://surveyplanet.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jwerre/fulcrum/issues"
+    "url": "https://github.com/jwerre/fulcrum-node/issues"
   },
-  "homepage": "https://github.com/jwerre/fulcrum#readme",
+  "homepage": "https://github.com/jwerre/fulcrum-node/blob/master/README.md",
   "dependencies": {
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
