@@ -1,5 +1,5 @@
 {
-  "name": "fulcrum",
+  "name": "fulcrum-node",
   "version": "0.0.3-7",
   "description": "The Fulcrum Node library provides convenient access to the Fulcrum API from applications written in server-side JavaScript.",
   "main": "libs/fulcrum.js",
