@@ -7,7 +7,7 @@ class ExchangeGroups extends FulcrumResource {
 	
 	constructor(fulcrum) {
 
-		super(fulcrum)
+		super(fulcrum);
 	}
 	
 	// POST  https://api.samplicio.us/Demand/v1/SupplierGroups/CreateWithSuppliers/{SurveyNumber}

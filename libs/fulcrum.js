@@ -1,55 +1,54 @@
 'use strict';
 
 
-const 	EventEmitter = require('events').EventEmitter,
-		Promise = require('bluebird'),
-		os = require('os'),
-		fs = require('fs'),
-		configFile = process.env.FULCRUM_CONF || os.homedir()+'/.fulcrum.json',
-		resources = {
+const {EventEmitter} = require('events');
+const Promise = require('bluebird');
+const os = require('os');
+const fs = require('fs');
+const configFile = process.env.FULCRUM_CONF || os.homedir()+'/.fulcrum.json';
+const resources = {
+
+	lookup: {
+		Definitions : require('./resources/lookup/definitions'),
+		QuestionLibrary : require('./resources/lookup/question_library'),
+	},
+
+	supply: {
+		Allocations : require('./resources/supply/allocations'),
+		EntryLinks : require('./resources/supply/entry_links'),
+		Qualifications : require('./resources/supply/qualifications'),
+		Quotas : require('./resources/supply/quotas'),
+		Recontact : require('./resources/supply/recontact'),
+		Recruit : require('./resources/supply/recruit'),
+		Statistics : require('./resources/supply/statistics'),
+		SurveyGroups : require('./resources/supply/survey_groups'),
+		Surveys : require('./resources/supply/surveys'),
+	},
 	
-			lookup: {
-				Definitions : require('./resources/lookup/definitions'),
-				QuestionLibrary : require('./resources/lookup/question_library'),
-			},
+	demand: {
+		ExchangeGroups : require('./resources/demand/exchange_groups'),
+		ExchangeTemplates : require('./resources/demand/exchange_templates'),
+		Feasibility : require('./resources/demand/feasibility'),
+		NonExchangeAllocations : require('./resources/demand/non_exchange_allocations'),
+		NonExchangeEntryLinks : require('./resources/demand/non_exchange_entry_links'),
+		Qualifications : require('./resources/demand/qualifications'),
+		Quotas : require('./resources/demand/quotas'),
+		// Reach : require('./resources/demand/reach'),
+		Recontact : require('./resources/demand/recontact'),
+		ServerToServer : require('./resources/demand/server_to_server'),
+		SurveyGroups : require('./resources/demand/survey_groups'),
+		Surveys : require('./resources/demand/surveys'),
+	},
 
-			supply: {
-				Allocations : require('./resources/supply/allocations'),
-				EntryLinks : require('./resources/supply/entry_links'),
-				Qualifications : require('./resources/supply/qualifications'),
-				Quotas : require('./resources/supply/quotas'),
-				Recontact : require('./resources/supply/recontact'),
-				Recruit : require('./resources/supply/recruit'),
-				Statistics : require('./resources/supply/statistics'),
-				SurveyGroups : require('./resources/supply/survey_groups'),
-				Surveys : require('./resources/supply/surveys'),
-			},
-			
-			demand: {
-				ExchangeGroups : require('./resources/demand/exchange_groups'),
-				ExchangeTemplates : require('./resources/demand/exchange_templates'),
-				Feasibility : require('./resources/demand/feasibility'),
-				NonExchangeAllocations : require('./resources/demand/non_exchange_allocations'),
-				NonExchangeEntryLinks : require('./resources/demand/non_exchange_entry_links'),
-				Qualifications : require('./resources/demand/qualifications'),
-				Quotas : require('./resources/demand/quotas'),
-				// Reach : require('./resources/demand/reach'),
-				Recontact : require('./resources/demand/recontact'),
-				ServerToServer : require('./resources/demand/server_to_server'),
-				SurveyGroups : require('./resources/demand/survey_groups'),
-				Surveys : require('./resources/demand/surveys'),
-			},
-
-			demandBeta: {
-				Dictionary: require('./resources/demand/beta/dictionary'),
-				Projects: require('./resources/demand/beta/projects'),
-				Reach: require('./resources/demand/beta/reach'),
-				Sessions: require('./resources/demand/beta/sessions'),
-				Surveys: require('./resources/demand/beta/surveys'),
-			}
-			
-			
-		};
+	demandBeta: {
+		Dictionary: require('./resources/demand/beta/dictionary'),
+		Projects: require('./resources/demand/beta/projects'),
+		Reach: require('./resources/demand/beta/reach'),
+		Sessions: require('./resources/demand/beta/sessions'),
+		Surveys: require('./resources/demand/beta/surveys'),
+	}
+	
+};
 
 let config = {};
 
@@ -70,7 +69,7 @@ Fulcrum.DEFAULT_PORT = '443';
 Fulcrum.DEFAULT_API_VERSION = 1;
 
 // Use node's default timeout: require('http').createServer().timeout;
-Fulcrum.DEFAULT_TIMEOUT = 120000
+Fulcrum.DEFAULT_TIMEOUT = 120000;
 
 Fulcrum.S2S_CALLBACK_VERSION = 1;
 
@@ -91,7 +90,7 @@ Fulcrum.USER_AGENT = {
 function Fulcrum(options) {
 	
 	if ( !options ) {
-		options = {}
+		options = {};
 	}
 	
 	if ( !(this instanceof Fulcrum) ) {
@@ -111,7 +110,7 @@ function Fulcrum(options) {
 	this.once = this._emitter.once.bind(this._emitter);
 	this.emit = this._emitter.emit.bind(this._emitter);
 	
-	this.Promise = Promise
+	this.Promise = Promise;
 
 	this._api = {
 		auth: options.key || config.key,

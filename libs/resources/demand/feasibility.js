@@ -6,14 +6,13 @@ class Feasibility extends FulcrumResource {
 	
 	
 	constructor(fulcrum) {
-
-		super(fulcrum)
+		super(fulcrum);
 	}
 	
 	// POST https://api.samplicio.us/Demand/v1/Feasibility/Time
 	showTimeToCompletion (args, callback) {
 		return this._request( 'POST'
-			, `/Demand/{{v}}/Feasibility/Time`
+			, '/Demand/{{v}}/Feasibility/Time'
 			, args
 			, null
 			, callback
@@ -25,7 +24,7 @@ class Feasibility extends FulcrumResource {
 	// POST https://api.samplicio.us/Demand/v1/Feasibility/Price
 	showPrice (args, callback) {
 		return this._request( 'POST'
-			, `/Demand/{{v}}/Feasibility/Price`
+			, '/Demand/{{v}}/Feasibility/Price'
 			, args
 			, null
 			, callback
@@ -37,7 +36,7 @@ class Feasibility extends FulcrumResource {
 	// POST https://api.samplicio.us/Demand/v1/Feasibility/NumberOfRespondents
 	showCompletesPerDay (args, callback) {
 		return this._request( 'POST'
-			, `/Demand/{{v}}/Feasibility/NumberOfRespondents`
+			, '/Demand/{{v}}/Feasibility/NumberOfRespondents'
 			, args
 			, null
 			, callback

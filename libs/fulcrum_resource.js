@@ -1,30 +1,28 @@
 'use strict';
 
-const	needle = require('needle'),
-		url = require('url'),
-		_ = require('lodash'),
-		utilities = require('./utilities'),
-		FulcrumError = require('./fulcrum_error');
+const	needle = require('needle');
+const _ = require('lodash');
+const FulcrumError = require('./fulcrum_error');
 
 /**
  * Encapsulates request logic for a Fulcrum Resource
  */
 class FulcrumResource {
 
-	constructor(fulcrum, urlData) {
+	constructor(fulcrum) {
 		this._fulcrum = fulcrum;
 	}
 	
 	_request (method, path, data, options, callback) {
 		
-		method = method || "get";
-		method = method.toLowerCase().trim()
+		method = method || 'get';
+		method = method.toLowerCase().trim();
 		
 		let version = null;
 		
 		if (options && options.version) {
-			version = options.version
-			delete options.version
+			version = options.version;
+			delete options.version;
 		}
 
 		if (_.isFunction(options)) {
@@ -32,7 +30,8 @@ class FulcrumResource {
 			options = null;
 		}
 		
-		let opts = _.defaultsDeep(options, {
+		let opts = _.defaultsDeep(options, 
+			{
 				json: method !== 'get',
 				compressed : true, // sets 'Accept-Encoding' to 'gzip,deflate'
 				follow_max : 5,    // follow up to five redirects
@@ -61,7 +60,7 @@ class FulcrumResource {
 					
 					if (!err) {
 						// returns null if statusCode is below 400
-						err = FulcrumError.generate(result.statusCode, result.body)
+						err = FulcrumError.generate(result.statusCode, result.body);
 					}
 						
 					if (err) {
@@ -76,7 +75,7 @@ class FulcrumResource {
 						else {
 							return reject(err);
 						}
-					};
+					}
 
 					// emit results
 					emit(successEvent, result.body);
@@ -99,10 +98,10 @@ class FulcrumResource {
 	_getRequestUrl (path, version) {
 
 		if (!version) {
-			version = this._fulcrum.getApiField('version')
+			version = this._fulcrum.getApiField('version');
 		}
 		
-		path = path.replace("{{v}}", `v${version}`);
+		path = path.replace('{{v}}', `v${version}`);
 		
 		// s2s callback has a different url
 		if ( /^(https?):\/\//i.test(path) ) {

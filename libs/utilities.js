@@ -1,5 +1,7 @@
 'use strict';
 
-const utilities = module.exports = {
+const utilities = {
 	
 };
+
+module.exports = utilities;
